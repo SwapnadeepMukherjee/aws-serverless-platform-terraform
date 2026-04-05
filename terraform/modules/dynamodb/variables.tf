@@ -1,1 +1,1 @@
-variable "talbe_name" {}
+variable "table_name" {}
