@@ -18,8 +18,11 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
-      working-directory: terraform/env/dev
+      working-directory: ./terraform/env/dev
 
     - name: Apply Terraform
       run: terraform apply -auto-approve
-      working-directory: terraform/env/dev
+      working-directory: ./terraform/env/dev
+
+    - name: Debug - List Files
+      run: ls -R
