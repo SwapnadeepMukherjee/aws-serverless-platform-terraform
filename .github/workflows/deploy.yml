@@ -16,8 +16,11 @@ jobs:
     - name: Debug Repo
       run: ls -R
 
-
-    - name: Set up Terraform
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 24.14.1
+  
+    - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
     - name: Initialize Terraform
