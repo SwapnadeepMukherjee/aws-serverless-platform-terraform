@@ -1,0 +1,1 @@
+variable "talbe_name" {}
