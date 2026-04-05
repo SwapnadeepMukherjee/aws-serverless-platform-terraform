@@ -24,5 +24,9 @@ jobs:
       run: terraform apply -auto-approve
       working-directory: ./terraform/env/dev
 
-    - name: Debug - List Files
-      run: ls -R
+    - name: Debug Repo Structure
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Listing files:"
+        ls -R
