@@ -7,7 +7,7 @@ module "lambda" {
   source        = "../../modules/lambda"
   function_name = "aws-serverless-platform-terraform-lambda"
   role_arn      = var.lambda_role_arn
-  filename      = "D:\Career\Personal_Study_Data\Github_Master\aws-serverless-platform-terraform\app\lambda.zip"
+  filename      = "../../app/lambda.zip"
 }
 
 module "api" {
