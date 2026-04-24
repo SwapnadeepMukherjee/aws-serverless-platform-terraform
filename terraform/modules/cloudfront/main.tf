@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distributioon" "this" {
+resource "aws_cloudfront_distribution" "this" {
     enabled = True
 
     origin {
