@@ -1,4 +1,14 @@
-env:
-    TF_VAR_bucket_name: ${{ sercrets.BUCKET_NAME}}
-    TF_VAR_lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN}}
-    TF_VAr-domain_name: ${{ secrets.DOMAIN_NAME }}
+variable "bucket_name" {
+  description = "S3 bucket name"
+  type        = string
+}
+
+variable "lambda_role_arn" {
+  description = "IAM role ARN for Lambda"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Domain name for ACM + CloudFront"
+  type        = string
+}
