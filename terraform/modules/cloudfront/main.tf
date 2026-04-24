@@ -1,5 +1,5 @@
 resource "aws_cloudfront_distribution" "this" {
-    enabled = True
+    enabled = true
 
     origin {
         domain_name = var.api_gateway_url
