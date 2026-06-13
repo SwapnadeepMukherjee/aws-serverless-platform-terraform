@@ -1,9 +1,21 @@
 name: Deploy Terraform
 
-on: 
+on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# env:
+#   AWS_REGION: ${{ vars.AWS_REGION }}                   # "ap-south-1"
+  # ECR_REPOSITORY: my-fastapi-app                       # Your repo name
+  # IMAGE_TAG: ${{ github.sha }}                         # Unique commit hash
+
+# Core Security Principle: Minimize GitHub Token Privileges globally permissions:
+permissions:
+  id-token: write   # REQUIRED for requesting the OIDC JWT
+  contents: read    # Required for actions/checkout
+
 
 jobs:
   lint-and-test:
@@ -42,8 +54,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Debug Repo
-      run: ls -R
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: arn:aws:iam::788531719687:role/github-actions-terraform-deploy
+        aws-region: ap-south-1
 
     - uses: actions/setup-node@v4
       with:
