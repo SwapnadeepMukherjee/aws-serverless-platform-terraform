@@ -16,7 +16,6 @@ permissions:
   id-token: write   # REQUIRED for requesting the OIDC JWT
   contents: read    # Required for actions/checkout
 
-
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
