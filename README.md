@@ -1,5 +1,5 @@
 # aws-serverless-platform-terraform
-This is a AWS Serverlesss Project created using Terraform
+This is a AWS Serverless Project created using Terraform
 
 ## Tech Stack:
 
