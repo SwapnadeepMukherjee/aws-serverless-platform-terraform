@@ -30,7 +30,7 @@ Main Terraform configuration directory for infrastructure as code.
 - **Core files:**
   - `backend.tf` - Terraform state backend configuration
   - `provider.tf` - AWS provider configuration
-  - `variables.tf` - Global variables
+  - `env/dev/variables.tf` - Environment-level input variables (`bucket_name`, `lambda_role_arn`, `domain_name`)
 
 ### `/app`
 Application code for AWS Lambda functions.
@@ -54,11 +54,21 @@ GitHub Actions CI/CD pipeline configuration.
 
 
 ## Features
-- Fully serverless (zero-cost design)
-- Infrastructure as Code
-- CI/CD pipeline
-- Secure IAM practices
+- Fully serverless (zero-cost design intent)
+- Infrastructure as Code, split into reusable modules
+- CI/CD pipeline scaffold (GitHub Actions)
+
+## Known Limitations / Work in Progress
+This is a learning project and is **not yet end-to-end functional**. Current gaps:
+- API Gateway is provisioned but has no route/integration to the Lambda function yet — the API doesn't call the function.
+- The ACM certificate is created in `ap-south-1` with no DNS validation records. CloudFront requires certs in `us-east-1`, and currently uses the CloudFront default certificate instead of the ACM one — the ACM module isn't actually wired in.
+- No automated tests exist yet; the test step in CI is disabled.
+- S3/DynamoDB don't yet have encryption, versioning, or point-in-time recovery configured.
+- IAM roles/policies are supplied externally (via `lambda_role_arn`), not managed in this repo.
 
 ## How to Run
-1. terraform init
-2. terraform apply
+1. `cd terraform/env/dev`
+2. `terraform init`
+3. `terraform apply` (requires `TF_VAR_bucket_name`, `TF_VAR_lambda_role_arn`, `TF_VAR_domain_name` to be set)
+
+Note: apply currently succeeds but the deployed stack is not yet functional end-to-end — see Known Limitations above.
