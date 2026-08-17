@@ -37,17 +37,14 @@ jobs:
       run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Static Analysis (checkov)
       run: checkov -d . --framework terraform --soft-fail
-    # - name: Run tests with coverage
-    #   run: |
-    #     export COVERAGE_PROCESS_START=.coveragerc
-    #     pytest --cov=src tests/ --cov-fail-under=80
+    - name: Run tests
+      run: pytest tests/ -v
 
   terraform:
     runs-on: ubuntu-latest
     env:
       TF_VAR_bucket_name: ${{ secrets.BUCKET_NAME }}
       TF_VAR_lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
-      TF_VAR_domain_name: ${{ secrets.DOMAIN_NAME }}
 
     steps:
     - name: Checkout code
@@ -68,21 +65,24 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
+    - name: Terraform Format Check
+      run: terraform fmt -check -recursive
+      working-directory: terraform
+
     - name: Initialize Terraform
       run: terraform init
       working-directory: terraform/env/dev
 
-    - name: Terraform Plan
-      run: terraform plan
-      working-directory: terraform/env/dev
-      
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    - name: Terraform Validate
+      run: terraform validate
       working-directory: terraform/env/dev
 
-    - name: Debug Repo Structure
-      run: |
-        echo "Current directory:"
-        pwd
-        echo "Listing files:"
-        ls -R
+    - name: Terraform Plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan
+      working-directory: terraform/env/dev
+
+    - name: Terraform Apply
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve
+      working-directory: terraform/env/dev

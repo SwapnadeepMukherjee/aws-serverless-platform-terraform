@@ -1,41 +1,41 @@
 resource "aws_cloudfront_distribution" "this" {
-    enabled = true
+  enabled = true
 
-    origin {
-        domain_name = var.api_gateway_url
-        origin_id   = "api-origin"
+  origin {
+    domain_name = var.api_gateway_url
+    origin_id   = "api-origin"
 
-        custom_origin_config {
-            http_port               = 80
-            https_port              = 443
-            origin_protocol_policy  = "https-only"
-            origin_ssl_protocols    = ["TLSv1.2"]
-        }
-        
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
 
-    default_cache_behavior {
-        target_origin_id        = "api-origin"
-        viewer_protocol_policy  = "redirect-to-https"
-        allowed_methods = ["GET", "HEAD"]
-        cached_methods = ["GET", "HEAD"]
+  }
 
-        forwarded_values{
-            query_string = true
-            headers = ["Authorization"]
-            cookies {
-                forward = "none"
-        }
-    }
-}
+  default_cache_behavior {
+    target_origin_id       = "api-origin"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
 
-    restrictions {
-        geo_restriction {
-            restriction_type = "none"
-        }
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization"]
+      cookies {
+        forward = "none"
+      }
     }
+  }
 
-    viewer_certificate {
-        cloudfront_default_certificate = true
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
     }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
 }
